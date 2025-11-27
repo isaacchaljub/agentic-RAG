@@ -1,2 +1,16 @@
+#Python cache directory
+**__pycache__**
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
 .env
+#Environment variables
+.env
+#Virtual environment
 .venv
+
+#Documents directory
+documents/
