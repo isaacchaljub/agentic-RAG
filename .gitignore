@@ -1,6 +1,7 @@
 #Python cache directory
 **__pycache__**
-__pycache__/
+**__pycache__**/**
+**/__pycache__**
 *.pyc
 *.pyo
 *.pyd
@@ -14,3 +15,6 @@ __pycache__/
 
 #Documents directory
 documents/
+
+#Logs 
+*.log
