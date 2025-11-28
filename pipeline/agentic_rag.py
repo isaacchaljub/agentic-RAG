@@ -219,7 +219,6 @@ def process_query(query, vector_db):
         similarity_scores = [cosine_similarity(embedded_query, cached_item[0]) for cached_item in query_cache]
         if np.max(similarity_scores) > similarity_threshold:
             return query_cache[np.argmax(similarity_scores)][2]
-#No cache, continue to the next step
     
     # Step 1: Get initial context from local documents
     local_context = create_rag_pipeline(query, vector_db)
