@@ -14,7 +14,7 @@ FASTAPI_PID=$!
 sleep 30
 
 # Start Streamlit in background (logs to file)
-nohup .venv/bin/streamlit run app/main.py --server.address 0.0.0.0 --server.port 8501 > streamlit.log 2>&1 &
+nohup .venv/bin/streamlit run app/main.py > streamlit.log 2>&1 &
 STREAMLIT_PID=$!
 
 # Wait a moment for Streamlit to start

@@ -7,5 +7,8 @@ export LANG=en_US.UTF-8
 source .venv/bin/activate
 
 # Start Streamlit
-streamlit run app/main.py --server.address 0.0.0.0 --server.port 8501
+streamlit run app/main.py
+
+
+
 

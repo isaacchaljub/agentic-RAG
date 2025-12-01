@@ -7,4 +7,4 @@ REM Activate venv
 call .venv\Scripts\activate.bat
 
 REM Start Streamlit
-streamlit run app/main.py --server.address 0.0.0.0 --server.port 8501
+streamlit run app/main.py
