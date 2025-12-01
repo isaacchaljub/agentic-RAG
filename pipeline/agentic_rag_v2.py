@@ -53,8 +53,7 @@ web_llm = ChatLiteLLM(
     max_tokens=2000,
     timeout=None,
     max_retries=2,
-    api_key=GEMINI_API_KEY,  # Pass directly, but LiteLLM will also check env
-)
+    api_key=GEMINI_API_KEY)
 
 # Semantic caching
 query_cache = []
