@@ -64,7 +64,8 @@ User Query
 Start the API server:
 
 ```bash
-fastapi run serving_api/main.py --host 0.0.0.0 --port 8000
+fastapi run serving_api/main.py --host 0.0.0.0 --port 8000 # use main_v2.py if
+# you want to use langgraph instead of CrewAI
 ```
 
 **API Endpoints:**
@@ -97,7 +98,7 @@ Navigate to `http://localhost:8501` in your browser.
 Run queries directly:
 
 ```bash
-python pipeline/agentic_rag.py
+python pipeline/agentic_rag.py # Use agentic-rag_v2.py to use langgraph instead of CrewAI
 ```
 
 ## Project Structure
