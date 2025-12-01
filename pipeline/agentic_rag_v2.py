@@ -47,8 +47,6 @@ class AgentState(TypedDict):
     vector_db: Optional[FAISS]  # Optional, can be None
 
 # LLM for web agent tasks (using LiteLLM with Gemini)
-# Note: LiteLLM reads GEMINI_API_KEY from environment automatically
-# Since we loaded it via os.getenv(), it's already available
 web_llm = ChatLiteLLM(
     model="gemini/gemini-2.5-flash",
     temperature=0.7,
@@ -343,7 +341,7 @@ def main():
 
     # Create the vector database
     vector_db = initialize_vectorstore(documents_directory)
-    
+
     # Define the query
     query = "What is Agentic RAG?"
     # query = "What is the highest city in Colombia?"
