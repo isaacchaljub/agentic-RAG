@@ -10,7 +10,10 @@ from langchain.agents import create_agent
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, END
 from langchain_litellm import ChatLiteLLM
-from crewai_tools import SerperDevTool, ScrapeWebsiteTool
+from langchain_core.tools import tool
+from langchain_community.utilities import GoogleSerperAPIWrapper
+import re
+import requests
 from numpy.linalg import norm
 from numpy import dot
 import numpy as np
@@ -48,7 +51,7 @@ class AgentState(TypedDict):
 
 # LLM for web agent tasks (using LiteLLM with Gemini)
 web_llm = ChatLiteLLM(
-    model="gemini/gemini-2.5-flash",
+    model="gemini/gemini-flash-latest",
     temperature=0.7,
     max_tokens=2000,
     timeout=None,
@@ -150,6 +153,29 @@ def use_local_context(state: AgentState) -> AgentState:
     return {**state, "context": state["local_context"]}
 
 
+# Web tools — LangChain-native, replacing the incompatible CrewAI tools.
+# (langchain.agents.create_agent only accepts LangChain tools, not crewai_tools objects.)
+_serper = GoogleSerperAPIWrapper()  # reads SERPER_API_KEY from the environment
+
+
+@tool
+def web_search(query: str) -> str:
+    """Search the web and return relevant result snippets for a query."""
+    return _serper.run(query)
+
+
+@tool
+def scrape_url(url: str) -> str:
+    """Fetch and return the visible text content of a web page URL."""
+    try:
+        resp = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+        text = re.sub(r"<[^>]+>", " ", resp.text)   # strip HTML tags
+        return re.sub(r"\s+", " ", text).strip()[:4000]  # collapse whitespace, cap length
+    except Exception as e:
+        return f"Failed to scrape {url}: {e}"
+
+
 # Global web agent (created once and reused)
 _web_agent = None
 
@@ -157,12 +183,10 @@ def get_web_agent():
     """Get or create the LangChain agent using create_agent"""
     global _web_agent
     if _web_agent is None:
-        tools = [SerperDevTool(), ScrapeWebsiteTool()]
-        
         # Create the agent using langchain.agents.create_agent
         _web_agent = create_agent(
             model=web_llm,
-            tools=tools,
+            tools=[web_search, scrape_url],
             system_prompt="""You are an expert web research assistant. Your task is to:
 1. Search the web for relevant information about the user's query
 2. Scrape and analyze the most relevant web pages

@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Response, HTTPException
-from ..pipeline.agentic_rag_v2 import process_query, initialize_vectorstore
+from pipeline.agentic_rag_v2 import process_query, initialize_vectorstore
 import asyncio
 from logging import getLogger
 from contextlib import asynccontextmanager

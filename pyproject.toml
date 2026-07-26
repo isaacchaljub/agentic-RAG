@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "beautifulsoup4>=4.14.2",
     "crewai-tools>=1.6.0",
     "crewai[google-genai]>=1.6.0",
     "faiss-cpu>=1.13.0",
@@ -25,4 +26,21 @@ dependencies = [
     "ser>=0.1.0",
     "setuptools>=80.9.0",
     "streamlit>=1.51.0",
+    # torch arrives transitively via sentence-transformers, but we must declare
+    # it directly here — [tool.uv.sources] redirects are ONLY honored for direct
+    # dependencies. Without this line, the pytorch-cpu redirect below is ignored.
+    "torch>=2.9.1",
 ]
+
+# --- Force the CPU-only PyTorch build inside the Linux container image. ---
+# sentence-transformers pulls in `torch`, which on PyPI defaults to the CUDA
+# build (~5-6 GB of nvidia-*-cu12 wheels we never use on a CPU RAG API).
+# We redirect torch to PyTorch's CPU wheel index, but ONLY on Linux, so local
+# macOS/Windows dev keeps resolving torch normally from PyPI.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

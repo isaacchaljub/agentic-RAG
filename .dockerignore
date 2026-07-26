@@ -1,0 +1,37 @@
+# .dockerignore — controls what gets sent to the Docker daemon as "build context".
+# Anything listed here is invisible to the build: it can't be COPYed, and it
+# doesn't bloat/slow the build. Two jobs: keep the context small, and keep
+# secrets out of the image.
+
+# The local virtualenv: potentially gigabytes, and built for macOS — useless and
+# harmful inside a Linux image. We install fresh deps in the build instead.
+.venv/
+
+# SECRETS — never bake these into an image. Injected at runtime instead.
+.env
+.env.*
+
+# Git history and editor/tooling dirs — not needed to run the app.
+.git/
+.gitignore
+.claude/
+
+# Python bytecode caches.
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local run artifacts.
+*.log
+
+# Local launch scripts (Windows/macOS convenience only; the container has its own CMD).
+*.bat
+run_all.sh
+start_api.sh
+start_streamlit.sh
+stop_services.sh
+
+# OS cruft.
+.DS_Store

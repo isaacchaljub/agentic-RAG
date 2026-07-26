@@ -1,0 +1,35 @@
+{
+  "family": "agentic-rag",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "3072",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "executionRoleArn": "arn:aws:iam::534344665108:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "agentic-rag",
+      "image": "534344665108.dkr.ecr.us-east-1.amazonaws.com/agentic-rag-api:v1",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 8000, "protocol": "tcp" }
+      ],
+      "secrets": [
+        { "name": "GROQ_API_KEY",   "valueFrom": "arn:aws:secretsmanager:us-east-1:534344665108:secret:agentic-rag/keys-GFnthI:GROQ_API_KEY::" },
+        { "name": "GEMINI_API_KEY", "valueFrom": "arn:aws:secretsmanager:us-east-1:534344665108:secret:agentic-rag/keys-GFnthI:GEMINI_API_KEY::" },
+        { "name": "SERPER_API_KEY", "valueFrom": "arn:aws:secretsmanager:us-east-1:534344665108:secret:agentic-rag/keys-GFnthI:SERPER_API_KEY::" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/agentic-rag",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

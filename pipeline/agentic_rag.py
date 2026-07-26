@@ -34,7 +34,7 @@ llm = ChatGroq(
 
 
 crew_llm = LLM(
-    model="gemini/gemini-2.5-flash",
+    model="gemini/gemini-flash-latest",
     api_key=GEMINI_API_KEY,
     temperature=0.7
 )
